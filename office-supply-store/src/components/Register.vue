@@ -3,7 +3,9 @@
         <div class="row align-items-center justify-content-center">
             <div class="col col-12 col-sm-6 col-md-10 col-lg-6">
                 <div class="card">
-                    <div class="card-header">Register</div>
+                  <div class="card-header" style="font-size: 24px; margin-bottom: 10px;">Register</div>
+
+
                     <div v-if="showMsg === 'error'" class="alert alert-danger" role="alert">
                     Invalid username or password. Please Try again.
                     </div>
@@ -27,7 +29,7 @@
                         </div>
                    <!-- Input Field Section -->
                         <form v-else ref="form">
-                            <div class="container-fuild">
+                            <div class="container-fuild"></div>
 
                                     <div class="form-group row justify-content-left py-2">
                                         <label class="col-4">Username</label>
@@ -67,12 +69,11 @@
                                         </div>
                                     </div>
                                     <div class="row justify-content-around">
-                                        <div type="button" class="btn btn-secondary col-6" @click="login">Back to Login</div>
-                                      <p>
-
-                                      </p>
-                                       <div type="button" class="btn btn-primary col-4" @click="register">Register</div>
-                                   </div>
+                                      <div class="btn-group" role="group" aria-label="Button group with nested dropdown">
+                                      <div type="button" class="btn btn-primary col-4" @click="login" style="background-color: lightblue; color: white; margin-bottom: 10px;">Back to Login</div>
+                                      
+                                      <div type="button" class="btn btn-primary col-4" @click="registerUser" style="background-color: lightblue; color: white;">Register</div>
+                                      </div>
                            </div>
                         </form>
                    </div>
@@ -83,7 +84,7 @@
     </div>
 </template>
 
-<script>
+<!-- <script>
 
   import router from '../router';
   import {APIService} from '../http/APIService';
@@ -144,5 +145,67 @@
     }
     }
   }
-</script>
+</script> -->
 
+<script>
+  import router from '../router';
+  import { APIService } from '../http/APIService';
+
+  const apiService = new APIService();
+
+  export default {
+    name: 'Register',
+
+    data: () => ({
+      credentials: {},
+      password: '',
+      repassword: '',
+      valid: true,
+      showMsg: '',
+      loading: false,
+      rules: {
+        username: [
+          v => !!v || 'Username is required',
+          v => (v && v.length > 3) || 'A username must be more than 3 characters long',
+          v => /^[a-z0-9_]+$/.test(v) || 'A username can only contain letters and digits',
+        ],
+        password: [
+          v => !!v || 'Password is required',
+          v => (v && v.length > 7) || 'The password must be longer than 7 characters',
+        ],
+        email: [v => !!v || 'Email is required'],
+        repassword: [v => (v == this.password) || 'Passwords must match'],
+      },
+      showPassword: false,
+    }),
+
+    methods: {
+      registerUser() {
+        this.loading = true;
+        apiService
+          .registerUser(this.credentials)
+          .then((response) => {
+            if (response.status === 201) {
+              this.showMsg = '';
+              router.push({name: 'Auth'});
+            } else {
+              this.showMsg = 'error';
+            }
+            this.loading = false;
+          })
+          .catch((error) => {
+            if (error.response.status === 401) {
+              router.push({name: 'Auth'});
+            } else if (error.response.status === 400) {
+              this.showMsg = 'error';
+            }
+            this.loading = false;
+          });
+      },
+
+      login() {
+        router.push({ name: 'Auth' });
+      },
+    },
+  };
+</script>

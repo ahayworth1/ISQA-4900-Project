@@ -10,13 +10,19 @@
       <li class="nav-item">
           <router-link to="/orders">Orders</router-link>
       </li>
+    <li class="nav-item">
+          <router-link to="/auth">Login</router-link>
+      </li> 
+
       <li class="nav-item">
-          <router-link to="/register">Login</router-link>
+          <router-link to="/register">Register</router-link>
       </li>
-      <li class="nav-item">
-          <router-link to="/Orders">Orders</router-link>
+      <li class="nav-item  .justify-content-end" v-if="authenticated" @click="logout" >
+          | <router-link :to="{name: 'Auth'}">Logout</router-link>
       </li>
-  </ul>
+  </ul> 
+
+
   <router-view/>
 </template>
 
