@@ -11,7 +11,10 @@
           <router-link to="/orders">Orders</router-link>
       </li>
       <li class="nav-item">
-          <router-link to="/login">Login</router-link>
+          <router-link to="/register">Login</router-link>
+      </li>
+      <li class="nav-item">
+          <router-link to="/Orders">Orders</router-link>
       </li>
   </ul>
   <router-view/>
