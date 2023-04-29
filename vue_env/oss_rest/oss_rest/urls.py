@@ -10,6 +10,7 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('auth/', obtain_jwt_token),
 
+
     # Customer Endpoints
     path('customers/', views.customer_list),
     url(r'^api/customers/$', views.customer_list),

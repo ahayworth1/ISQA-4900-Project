@@ -1,12 +1,14 @@
 import axios from 'axios';
-const API_URL = 'https://ahayworth20.pythonanywhere.com/'; /* 'http://localhost:8000' http://127.0.0.1:8000/ or  'https://movies-groyce.pythonanywhere.com/'*/
+
+const API_URL = 'http://callahanpilkington.pythonanywhere.com';
 
 export class APIService {
-  constructor() {
+  constructor() {}
 
+  getInventory() {
+    const url = `${API_URL}/api/inventory/`;
+    return axios.get(url);
   }
-
-
 
   authenticateLogin(credentials) {
     const url = `${API_URL}/auth/`;
@@ -14,8 +16,8 @@ export class APIService {
   }
 
   registerUser(credentials) {
-     const url = `${API_URL}/register/`;
-     credentials.customusername = credentials.username
-     return axios.post(url, credentials);
+    const url = `${API_URL}/register/`;
+    credentials.customusername = credentials.username;
+    return axios.post(url, credentials);
   }
 }

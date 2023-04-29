@@ -34,7 +34,7 @@ export default {
   },
   methods: {
     getUser() {
-      if (localStorage.getItem('isAuthenticates') && JSON.parse(localStorage.getItem('isAuthenticates')) === true) {
+      if (localStorage.getItem('isAuthenticated') && JSON.parse(localStorage.getItem('isAuthenticated')) === true) {
         this.validUserName = JSON.parse(localStorage.getItem('log_user'))
       }
     }
