@@ -17,7 +17,7 @@
   <img :src="require('@/assets/office.jpg')" class="card-img-top" style="height: 15rem">
 </template>
 
-#cijfaisejfajfkjaefkljsaerkfjarljfhaselj
+
 
 <script>
 import router from '../router'
