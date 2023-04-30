@@ -5,7 +5,8 @@
         <div class="col-12 col-sm-6 col-md-4 col-lg-4">
           <div class="card mx-auto shadow">
             <div class="card-body">
-              <div class="card-title"><span>Login</span></div>
+              <div class="card-header" style="font-size: 24px; margin-bottom: 10px;">Login </div>
+
               <div
                 v-if="showMsg === 'error'"
                 close-icon="mdi-close-circle"
@@ -84,8 +85,8 @@
                 </div>
   
   
-                <button ref ="form" @click.prevent="login" class="btn btn-primary">Login</button>
-  
+                <!-- <button ref ="form" @click.prevent="login">Login</button> -->
+                <div type="button" class="btn btn-primary col-4" @click.prevent="login" style="background-color: lightblue; color: white; margin-bottom: 10px;">Login</div>
   
   
   
@@ -105,9 +106,9 @@
   
   
   
-    // import router from '../router';
-    // import {APIService} from '../http/APIService';
-    // const apiService = new APIService();
+    import router from '../router';
+    import {APIService} from '../http/APIService';
+    const apiService = new APIService();
   
   
   export default {
@@ -141,15 +142,15 @@
               localStorage.setItem('token', res.data.token);
               localStorage.setItem('isAuthenticates', JSON.stringify(true));
               localStorage.setItem('log_user', JSON.stringify(this.credentials.username));
-              //router.push("/");
-              //router.go(-1);
+              router.push("/");
+              router.go(-1);
                window.location = "/"
             }).catch(e => {
               this.loading = false;
               localStorage.removeItem('isAuthenticates');
               localStorage.removeItem('log_user');
               localStorage.removeItem('token');
-             // router.go(-1);
+              router.go(-1);
               this.showMsg = 'error';
             })
           }

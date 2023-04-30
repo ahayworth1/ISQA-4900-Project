@@ -1,134 +1,44 @@
 <template>
-
-
-    <!-- Welcome Text -->
-
-
-    <div class="container-fuild">
-
-
-        <div class="row">
-
-
-            <div class="col col-12 align-items-center justify-content-center">
-
-
-                <blockquote>
-
-
-                    &#8220;Welcome {{validUserName}}!&#8221;
-                    
-
-                    <footer>
-
-
-                    <small>
-
-
-                        <em>&mdash;The Office Office Supply Store.</em>
-                        
-
-
-                    </small>
-
-
-                    </footer>
-
-
-                </blockquote>
-
-
-            </div>
-
-
-        </div>
-
-
+  <!-- Welcome Text -->
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col col-12 align-items-center justify-content-center">
+        <blockquote>
+          &ldquo;Welcome {{ validUserName }}!&rdquo;
+          <footer>
+            <small>
+              <em>&mdash;The Office Office Supply Store.</em>
+            </small>
+          </footer>
+        </blockquote>
+      </div>
     </div>
-    <img :src="require('@/assets/office.jpg')" class="card-img-top" style="height: 15rem">
-
-
-
-
-
-
-
-
-
-
-
-
-
+  </div>
+  <img :src="require('@/assets/office.jpg')" class="card-img-top" style="height: 15rem">
 </template>
 
 
 
-
-
-
-
-
 <script>
-
-
 import router from '../router'
 
-
-
-
-
-
-
-
-  export default {
-
-
-    name: 'Home',
-
-
-    data: () => ({
-
-
-      validUserName: "Guest"
-
-
-    }),
-
-
-    mounted() {
-
-
-      this.getUser();
-
-
-    },
-
-
-
-
-
-      getUser() {
-
-
-        if (localStorage.getItem("isAuthenticates")
-
-
-          && JSON.parse(localStorage.getItem("isAuthenticates")) === true) {
-
-
-          this.validUserName = JSON.parse(localStorage.getItem("log_user"));
-
-
-        }
-
-
-      }
-
-
+export default {
+  name: 'Home',
+  data() {
+    return {
+      validUserName: 'Guest'
     }
-
-
+  },
+  mounted() {
+    this.getUser()
+  },
+  methods: {
+    getUser() {
+      if (localStorage.getItem('isAuthenticated') && JSON.parse(localStorage.getItem('isAuthenticated')) === true) {
+        this.validUserName = JSON.parse(localStorage.getItem('log_user'))
+      }
+    }
+  }
+}
 </script>
-
-
 
