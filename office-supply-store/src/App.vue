@@ -17,6 +17,9 @@
       <li class="nav-item">
           <router-link to="/register">Register</router-link>
       </li>
+      <li class="nav-item">
+          <router-link to="/cart">Cart</router-link>
+      </li>
       <li class="nav-item  .justify-content-end" v-if="authenticated" @click="logout" >
           | <router-link :to="{name: 'Auth'}">Logout</router-link>
       </li>

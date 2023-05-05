@@ -4,6 +4,7 @@ import Auth from '@/components/Auth.vue'
 import Inventory from '@/components/Inventory.vue'
 import Register from '@/components/Register.vue'
 import Orders from '@/components/Orders.vue'
+import Cart from '@/components/Cart.vue'
 
 const routes = [
   {
@@ -30,7 +31,12 @@ const routes = [
      path:'/orders',
      name: 'Orders',
      component: Orders
-   }
+   },
+   {
+    path:'/cart',
+    name: 'Cart',
+    component: Cart
+  }
 ]
   const router = createRouter({
     history: createWebHistory(process.env.BASE_URL),
