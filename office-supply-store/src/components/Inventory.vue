@@ -29,17 +29,25 @@
     </table>
   </div>
 </template>
+
 <script>
 import db from '@/boot/firebase.js'
 
 export default {
   data() {
     return {
-      inventory: []
+      inventory: [],
+      cart: []
     }
   },
   created() {
     this.loadInventory()
+    this.loadCart()
+  },
+  computed: {
+    total() {
+      return this.cart.reduce((total, item) => total + (item.quantity * item.price), 0)
+    }
   },
   methods: {
     async loadInventory() {
@@ -61,26 +69,55 @@ export default {
         console.log(error)
       }
     },
+    loadCart() {
+  const cartString = localStorage.getItem('cart')
+  if (cartString) {
+    this.cart = JSON.parse(cartString)
+  }
+},
+
     async addToCart(item) {
-  // Decrement the quantity of the item in the inventory
-  const inventoryRef = db.collection('inventory').doc(item.id)
-  await inventoryRef.update({
-    quantity: item.quantity - 1
-  })
-  item.quantity -= 1
+      // Find the item in the inventory with a matching ID
+      const inventoryItem = this.inventory.find(i => i.id === item.id)
+      
+      // Check if the item is in stock
+      if (inventoryItem.quantity === 0) {
+        console.log('Item is out of stock')
+        return
+      }
+      
+      // Decrement the quantity of the item in the inventory
+      const inventoryRef = db.collection('inventory').doc(item.id)
+      await inventoryRef.update({
+        quantity: item.quantity - 1
+      })
+      inventoryItem.quantity -= 1
 
-  // Add the item to the cart
-  this.cart.push(item);
+      // Check if the item is already in the cart
+      const existingCartItem = this.cart.find(cartItem => cartItem.id === item.id)
+      if (existingCartItem) {
+        existingCartItem.quantity += 1
+      } else {
+        const cartItem = {
+          id: item.id,
+          name: item.name,
+          quantity: 1,
+          price: item.price,
+          image: item.image
+        }
+        this.cart.push(cartItem)
+      }
 
-  // Store the updated cart in localStorage
-  localStorage.setItem('cart', JSON.stringify(this.cart));
+      // Store the updated cart in localStorage
+      localStorage.setItem('cart', JSON.stringify(this.cart))
 
-  // Redirect to the cart page
-  this.$router.push('/cart');
-}
+      // Redirect to the cart page
+      this.$router.push('/cart')
+    }
   }
 }
 </script>
+
 
 <style scoped>
 .container {

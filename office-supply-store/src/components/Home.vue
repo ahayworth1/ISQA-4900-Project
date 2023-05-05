@@ -7,10 +7,10 @@
     </div>
   </div>
   <div class="d-flex justify-content-center mb-4">
-  <img :src="require('@/assets/office.gif')" class="card-img-top" style="height: 15rem; margin-bottom: 2rem;">
+  <img :src="require('@/assets/office.gif')" class="card-img-top" style="height: 15rem; margin-bottom: 0px;">
 </div>
         <blockquote>
-          &ldquo;Welcome {{ validUserName }}!&rdquo;
+          Welcome to our store!
           <footer>
             <small>
               <em>&mdash;The Office, Office Supply Store.</em>
@@ -57,7 +57,8 @@ div {
 vertical-align: top;
 font-weight: bold;
 color: #2c3e50;
-list-style: none;}
+list-style: none;};
+
 </style>
 
 

@@ -1,180 +1,43 @@
-<template>
-  
-    <div class="container">
-      <div class="row align-items-center justify-content-center">
-        <div class="col-12 col-sm-6 col-md-4 col-lg-4">
-          <div class="card mx-auto shadow">
-            <div class="card-body">
-              <div class="card-header" style="font-size: 24px; margin-bottom: 10px;">Login </div>
 
-              <div
-                v-if="showMsg === 'error'"
-                close-icon="mdi-close-circle"
-                :value="true"
-                class="alert alert-danger"
-                role="alert"
-                dense
-              >
-                Invalid username or password. Please Try again.
-              </div>
-              <div class="card-text pt-2">
-                <div
-                  class="row align-items-center justify-content-center"
-                  v-if="loading"
-                >
-                  <div class="progress">
-                    <div
-                      class="
-                        progress-bar progress-bar-striped progress-bar-animated
-                      "
-                      role="progressbar"
-                      aria-valuenow="75"
-                      aria-valuemin="0"
-                      aria-valuemax="100"
-                      style="width: 75%"
-                    ></div>
-                  </div>
-                </div>
-  
-  
-              
-  
-  
-                <div class="col-md-10 mb-3">
-                  <div class="input-group">
-                    <div class="input-group-prepend">
-                      <span class="input-group-text">@</span>
-                    </div>
-                    <input
-                      
-                      v-model="credentials.username"
-                      :counter="70"
-                      label="Username"
-                      :rules="rules.username"
-                      maxlength="70"
-                      required
-                      type="text"
-                      class="form-control mb-3"
-                      placeholder="Username"
-                      aria-describedby="inputGroupPrepend2"
-                    />
-  
-  
-                    <div class="w-100"></div>
-  
-  
-                    <div class="input-group-prepend">
-                      <span class="input-group-text">***</span>
-                    </div>
-                    <input
-                      :type="showPassword ? 'text' : 'Password'"
-                      v-model="credentials.password"
-                      label="Password"
-                      :rules="rules.password"
-                      maxlength="20"
-                      required
-                      :append-icon="showPassword ? 'mdi-eye' : 'mdi-eye-off'"
-                      @click:append="showPassword = ! showPassword"
-                      class="form-control"
-                      placeholder="Password"
-                      aria-describedby="inputGroupPrepend2"
-  
-  
-                    />
-                  </div>
-                </div>
-  
-  
-                <!-- <button ref ="form" @click.prevent="login">Login</button> -->
-                <div type="button" class="btn btn-primary col-4" @click.prevent="login" style="background-color: lightblue; color: white; margin-bottom: 10px;">Login</div>
-  
-  
-  
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
+   <template>
+    <div>
+      <h2>Login</h2>
+      <form>
+        <label>Email:</label>
+        <input type="email" v-model="email">
+        <br><br>
+        <label>Password:</label>
+        <input type="password" v-model="password">
+        <br><br>
+        <button @click.prevent="login">Login</button>
+      </form>
+      <p v-if="errorMessage">{{ errorMessage }}</p>
     </div>
-  
-  
   </template>
   
-  
   <script>
-  
-  
-  
-  
-    import router from '../router';
-    import {APIService} from '../http/APIService';
-    const apiService = new APIService();
-  
+  import firebase from 'firebase/app';
+  import 'firebase/auth';
   
   export default {
-      name: 'Auth',
-  
-  
-      data: () => ({
-        credentials: {},
-        valid: true,
-        showMsg: '',
-        loading: false,
-        rules: {
-          username: [
-            v => !!v || "Username is required",
-            v => (v && v.length > 3) || "A username must be more than 3 characters long",
-            v => /^[a-z0-9_]+$/.test(v) || "A username can only contain letters and digits"
-          ],
-          password: [
-            v => !!v || "Password is required",
-            v => (v && v.length > 7) || "The password must be longer than 7 characters"
-          ]
-        },
-        showPassword: false,
-      }),
-      methods: {
-        login() {
-          // checking if the input is valid
-          if (this.$refs.form) {
-            this.loading = true;
-              apiService.authenticateLogin(this.credentials).then((res)=>{
-              localStorage.setItem('token', res.data.token);
-              localStorage.setItem('isAuthenticates', JSON.stringify(true));
-              localStorage.setItem('log_user', JSON.stringify(this.credentials.username));
-              router.push("/");
-              router.go(-1);
-               window.location = "/"
-            }).catch(e => {
-              this.loading = false;
-              localStorage.removeItem('isAuthenticates');
-              localStorage.removeItem('log_user');
-              localStorage.removeItem('token');
-              router.go(-1);
-              this.showMsg = 'error';
-            })
-          }
+    data() {
+      return {
+        email: '',
+        password: '',
+      };
+    },
+    methods: {
+    async login() {
+      try {
+        await firebase.auth().signInWithEmailAndPassword(this.email, this.password);
+        console.log('Logged in successfully');
+        this.$router.push('/');
+      } catch (error) {
+        if (error.code === 'auth/user-not-found' || error.code === 'auth/wrong-password') {
+          this.errorMessage = 'Incorrect email or password.';
         }
       }
-  }
-  </script>
-  
-  
-  <style>
-  
-  
-  input {
-      padding: 1em
-  }
-  
-  
-  form {
-    display: flex;
-    justify-content: center;
-    flex-direction: vertical;
-  }
-  
-  
-  </style>
-  
-  
+    },
+  },
+};
+</script>
