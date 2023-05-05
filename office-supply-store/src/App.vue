@@ -1,6 +1,8 @@
 <template>
   <ul class="nav justify-content-end">
-      <div class="EFS">The Office Office Supply Store</div>
+    
+
+      <div class="EFS">The Office, Office Supply Store</div>
       <li class="nav-item active">
           <router-link to="/">Home</router-link> 
       </li>
@@ -23,6 +25,8 @@
       <li class="nav-item  .justify-content-end" v-if="authenticated" @click="logout" >
           | <router-link :to="{name: 'Auth'}">Logout</router-link>
       </li>
+      
+
   </ul> 
 
 
@@ -93,12 +97,16 @@ export default {
   .nav {
       padding: 1em;
       background-color: cadetblue;
+      width: 1400px;
       
       li {
-          font-weight: bold;
-          color: #2c3e50;
-          list-style: none;
-      }
+  display: inline-block;
+  vertical-align: top;
+  font-weight: bold;
+  color: #2c3e50;
+  list-style: none;
+}
+
 
 
       a {
@@ -113,7 +121,6 @@ export default {
 
 
       .EFS{
-          // margin-right: 33em;
           text-align: center;
           font-weight: bold;
           font-size: 30px;
