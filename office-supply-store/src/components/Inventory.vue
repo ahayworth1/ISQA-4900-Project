@@ -1,108 +1,29 @@
-<!-- <template>
-    <div>
-      <h1 class="title">Inventory List</h1>
-      <ul1>
-        <li>Desk</li>
-        <li>Chair</li>
-        <li>Pencils</li>
-        <li>Pens</li>
-      </ul1>
-    </div>
-  </template>
-  
-  <script>
-  export default {
-    name: 'Inventory'
-  }
-  </script>
-  
-  <style>
-  .title {
-    font-size: 2em;
-    text-align: center;
-    margin-bottom: 1em;
-  }
-  ul1 {
-  text-align: center;
-  list-style: none;
-  font-size: 20px;
-}
-
-  </style> -->
-
-  <!-- <template>
-    <div>
-      <h1 class="title">Inventory List</h1>
-      <ul>
-        <li v-for="(item, index) in inventory" :key="index">
-          {{ item.name }} - Stock: {{ item.stock }} - Price: {{ item.price }}
-          <img v-if="item.name === 'Pencils'" :src="require(`@/assets/OfficePencil1.jpg`)" alt="Pencil Image" height="100" />
-          <img v-if="item.name === 'Chair'" :src="require(`@/assets/OfficeChair1.jpg`)" alt="Chair Image" height="100" />
-          <img v-if="item.name === 'Pens'" :src="require(`@/assets/OfficePen1.jpg`)" alt="Pen Image" height="100" />
-          <img v-if="item.name === 'Desk'" :src="require(`@/assets/OfficeDesk1.jpg`)" alt="Desk Image" height="100" />
-          <button v-if="item.stock > 0" @click="buyItem(index)">Add to Cart</button>
-        </li>
-      </ul>
-    </div>
-  </template>
-
-<script>
-export default {
-  name: 'Inventory',
-  data() {
-    return {
-      inventory: [
-        { name: 'Desk', stock: 5, price: 100 },
-        { name: 'Chair', stock: 10, price: 50 },
-        { name: 'Pencils', stock: 20, price: 1 },
-        { name: 'Pens', stock: 15, price: 2 }
-      ]
-    }
-  },
-  methods: {
-    buyItem(index) {
-      if (this.inventory[index].stock > 0) {
-        this.inventory[index].stock--
-      }
-    }
-  }
-}
-</script>
-<style>
-.title {
-  font-size: 2em;
-  text-align: center;
-  margin-bottom: 1em;
-}
-ul {
-  text-align: center;
-  font-size: 20px;
-  padding: 0;
-  list-style: none; /* remove bullets */
-}
-li {
-  margin-bottom: 0.5em;
-}
-</style> -->
-
 <template>
-  <div>
-    <h1>Inventory List</h1>
-    <table>
+  <div class="container">
+    <h2 class="title">Inventory</h2>
+    <table class="table">
       <thead>
         <tr>
           <th>Name</th>
+          <th> </th>
           <th>Description</th>
-          <th>Quantity</th>
+          <th>Quantity in Stock</th>
           <th>Price</th>
+          <th> </th>
+          
         </tr>
       </thead>
       <tbody>
-        <tr v-for="item in inventory" :key="item.id">
+        <tr v-for="(item, index) in inventory" :key="index">
           <td>{{ item.name }}</td>
+          <td><img :src="item.image" alt="image" style="max-width: 180px; max-height: 180px;"></td>
           <td>{{ item.description }}</td>
           <td>{{ item.quantity }}</td>
-          <td>{{ item.price }}</td>
+          <td>{{ '$' + item.price }}</td>
+          <td>
+            
+            <button @click="addToCart(item)">Add to Cart</button>
+          </td>
         </tr>
       </tbody>
     </table>
@@ -110,24 +31,127 @@ li {
 </template>
 
 <script>
-import axios from 'axios';
+import db from '@/boot/firebase.js'
 
 export default {
-  name: 'Inventory',
   data() {
     return {
-      inventory: []
-    };
+      inventory: [],
+      cart: []
+    }
   },
-  mounted() {
-    axios.get('https://example.com/api/inventory')
-      .then(response => {
-        this.inventory = response.data.data;
-      })
-      .catch(error => {
-        console.log(error);
-      });
+  created() {
+    this.loadInventory()
+    this.loadCart()
+  },
+  computed: {
+    total() {
+      return this.cart.reduce((total, item) => total + (item.quantity * item.price), 0)
+    }
+  },
+  methods: {
+    async loadInventory() {
+      try {
+        const querySnapshot = await db.collection('inventory').get()
+        const inventory = []
+        querySnapshot.forEach(doc => {
+          inventory.push({
+            id: doc.id,
+            name: doc.data().name,
+            description: doc.data().description,
+            quantity: doc.data().quantity,
+            price: doc.data().price,
+            image: doc.data().image
+          })
+        })
+        this.inventory = inventory
+      } catch (error) {
+        console.log(error)
+      }
+    },
+    loadCart() {
+  const cartString = localStorage.getItem('cart')
+  if (cartString) {
+    this.cart = JSON.parse(cartString)
   }
-};
+},
+
+    async addToCart(item) {
+      // Find the item in the inventory with a matching ID
+      const inventoryItem = this.inventory.find(i => i.id === item.id)
+      
+      // Check if the item is in stock
+      if (inventoryItem.quantity === 0) {
+        console.log('Item is out of stock')
+        return
+      }
+      
+      // Decrement the quantity of the item in the inventory
+      const inventoryRef = db.collection('inventory').doc(item.id)
+      await inventoryRef.update({
+        quantity: item.quantity - 1
+      })
+      inventoryItem.quantity -= 1
+
+      // Check if the item is already in the cart
+      const existingCartItem = this.cart.find(cartItem => cartItem.id === item.id)
+      if (existingCartItem) {
+        existingCartItem.quantity += 1
+      } else {
+        const cartItem = {
+          id: item.id,
+          name: item.name,
+          quantity: 1,
+          price: item.price,
+          image: item.image
+        }
+        this.cart.push(cartItem)
+      }
+
+      // Store the updated cart in localStorage
+      localStorage.setItem('cart', JSON.stringify(this.cart))
+
+      // Redirect to the cart page
+      this.$router.push('/cart')
+    }
+  }
+}
 </script>
+
+
+<style scoped>
+.container {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+.title {
+  font-size: 30px;
+  margin-bottom: 20px;
+}
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 20px;
+}
+
+th,
+td {
+  padding: 10px;
+  text-align: left;
+  border-bottom: 1px solid #ddd;
+  font-size: 20px;
+}
+
+th {
+  background-color: #f2f2f2;
+  font-weight: bold;
+  font-size: 20px;
+}
+</style>
+
+
+
 

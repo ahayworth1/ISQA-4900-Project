@@ -4,6 +4,9 @@ import Auth from '@/components/Auth.vue'
 import Inventory from '@/components/Inventory.vue'
 import Register from '@/components/Register.vue'
 import Orders from '@/components/Orders.vue'
+import Cart from '@/components/Cart.vue'
+import Checkout from '@/components/Checkout.vue'
+import Logout from '@/components/Logout.vue'
 
 const routes = [
   {
@@ -14,7 +17,7 @@ const routes = [
   {
     path: '/inventory',
     name: 'Inventory',
-    component: Inventory
+    component: Inventory,
   },
   {
     path: '/auth',
@@ -30,7 +33,22 @@ const routes = [
      path:'/orders',
      name: 'Orders',
      component: Orders
-   }
+   },
+   {
+    path:'/cart',
+    name: 'Cart',
+    component: Cart
+  },
+  {
+    path: '/checkout',
+    name: 'Checkout',
+    component: Checkout
+  },
+  {
+    path: '/logout',
+    name: 'Logout',
+    component: Logout
+  },
 ]
   const router = createRouter({
     history: createWebHistory(process.env.BASE_URL),
