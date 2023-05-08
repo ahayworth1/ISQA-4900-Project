@@ -1,13 +1,13 @@
 <template>
     <ul class="nav justify-content-end">
       <div class="EFS">The Office, Office Supply Store</div>
-      <li class="nav-item active">
+      <!-- <li class="nav-item active">
         <router-link to="/">Home</router-link> 
-      </li>
-      <li class="nav-item">
+      </li> -->
+      <template v-if="authenticated">
+        <li class="nav-item">
         <router-link to="/inventory">Inventory</router-link>
       </li>
-      <template v-if="authenticated">
         <li class="nav-item">
           <router-link to="/cart">Cart</router-link>
         </li>
@@ -19,6 +19,9 @@
         </li>
       </template>
       <template v-else>
+        <li class="nav-item active">
+        <router-link to="/">Home</router-link> 
+      </li>
         <li class="nav-item">
           <router-link to="/auth">Login</router-link>
         </li> 

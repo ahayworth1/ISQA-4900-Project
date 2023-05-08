@@ -30,7 +30,7 @@
       try {
         await firebase.auth().signInWithEmailAndPassword(this.email, this.password);
         console.log('Logged in successfully');
-        this.$router.push('/');
+        this.$router.push('/inventory');
       } catch (error) {
         if (error.code === 'auth/user-not-found' || error.code === 'auth/wrong-password') {
           this.errorMessage = 'Incorrect email or password.';

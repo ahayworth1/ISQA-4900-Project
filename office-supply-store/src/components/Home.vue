@@ -9,46 +9,13 @@
   <img :src="require('@/assets/office.gif')" class="card-img-top" style="height: 15rem; margin-bottom: 0px;">
 </div>
         <blockquote>
-          Welcome to our store!
+          Welcome to our store! Please <button class="btn btn-outline-secondary" @click="$router.push('/auth')">Login</button>or <button class="btn btn-outline-secondary" @click="$router.push('/register')">Register</button> to continue.
           <footer>
             <small>
               <em>&mdash;The Office, Office Supply Store.</em>
             </small>
           </footer>
         </blockquote>
-  <div class="container-fluid">
-  <div class="row align-items-center justify-content-center">
-    <div class="col col-12 col-sm-10 col-md-10">
-      <div class="card-deck">
-        <div class="card border-secondary mb-3" style="max-width: 18rem;">
-          <img :src="require('@/assets/cart.png')" class="card-img-top" style="height: 15rem">
-          <div class="card-body">
-            
-            <button class="btn btn-outline-secondary" @click="$router.push('/cart')">View Your Cart</button>
-          </div>
-        </div>
-        <div class="card border-secondary mb-3" style="max-width: 18rem;">
-          <img :src="require('@/assets/inventory.png')" class="card-img-top" style="height: 15rem">
-          <div class="card-body">
-            
-            <button class="btn btn-outline-secondary" @click="$router.push('/inventory')">View Our Inventory</button>
-          </div>
-        </div>
-        <div class="card border-secondary mb-3" style="max-width: 18rem;">
-          <img :src="require('@/assets/orders.png')" class="card-img-top" style="height: 15rem">
-          <div class="card-body">
-            
-            <button class="btn btn-outline-secondary" @click="$router.push('/orders')">View Your Orders</button>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
-
-
-
-
 </template>
 <style> 
 div {
@@ -83,4 +50,5 @@ export default {
   }
 }
 </script>
+
 

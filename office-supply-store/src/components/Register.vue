@@ -33,7 +33,7 @@ export default {
       auth.createUserWithEmailAndPassword(this.email, this.password)
         .then(userCredential => {
           console.log(userCredential)
-          this.$router.push('/');
+          this.$router.push('/inventory');
         })
         .catch(error => {
           console.error(error)
