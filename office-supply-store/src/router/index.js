@@ -9,6 +9,7 @@ import Checkout from '@/components/Checkout.vue'
 import Logout from '@/components/Logout.vue'
 import OrderConfirmation from '@/components/OrderConfirmation.vue'
 
+
 const routes = [
   {
     path: '/',

@@ -4,7 +4,7 @@
       <p>Thank you for your order!</p>
       <p>Please check your inbox for a confirmation email.</p>
       
-      <button @click="$router.push('/')">Continue Shopping</button>
+      <button @click="$router.push('/inventory')">Continue Shopping</button>
     </div>
   </template>
   
