@@ -1,4 +1,4 @@
-<template>
+<!-- <template>
   <ul class="nav justify-content-end">
     
 
@@ -31,7 +31,8 @@
 
 
   <router-view/>
-</template>
+</template> 
+
 
 <script>
 export default {
@@ -71,7 +72,75 @@ export default {
       },
   }
 };
-</script>
+</script> -->
+
+<template>
+    <ul class="nav justify-content-end">
+      <div class="EFS">The Office, Office Supply Store</div>
+      <li class="nav-item active">
+        <router-link to="/">Home</router-link> 
+      </li>
+      <li class="nav-item">
+        <router-link to="/inventory">Inventory</router-link>
+      </li>
+      <template v-if="authenticated">
+        <li class="nav-item">
+          <router-link to="/cart">Cart</router-link>
+        </li>
+        <li class="nav-item">
+          <router-link to="/orders">Orders</router-link>
+        </li>
+        <li class="nav-item">
+          <router-link to="/logout" @click.prevent="logout">Log Out</router-link>
+        </li>
+      </template>
+      <template v-else>
+        <li class="nav-item">
+          <router-link to="/auth">Login</router-link>
+        </li> 
+        <li class="nav-item">
+          <router-link to="/register">Register</router-link>
+        </li>
+      </template>
+    </ul> 
+    <router-view/>
+  </template> 
+  <script>
+  import firebase from 'firebase/app';
+  import 'firebase/auth';
+  
+  export default {
+    name: 'App',
+    data() {
+      return {
+        authenticated: false,
+      };
+    },
+    mounted() {
+      firebase.auth().onAuthStateChanged((user) => {
+        if (user) {
+          this.authenticated = true;
+        } else {
+          this.authenticated = false;
+        }
+      });
+    },
+    methods: {
+      logout() {
+        firebase.auth().signOut().then(() => {
+          this.authenticated = false;
+          this.$router.push('/');
+        }).catch((error) => {
+          console.log(error.message);
+        });
+      },
+    },
+  };
+  </script>
+
+
+  
+
 
 <style lang="scss">
   #app {
@@ -129,6 +198,6 @@ export default {
   }
 
 
-</style>
+</style> -->
 
 

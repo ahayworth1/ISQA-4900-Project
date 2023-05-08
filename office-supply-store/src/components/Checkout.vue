@@ -1,4 +1,4 @@
-<template>
+  <template>
     <div class="container">
       <h2 class="title">Checkout</h2>
       <form @submit.prevent="placeOrder">
@@ -39,8 +39,7 @@
           <input type="text" id="cardExp" v-model="cardExp" required>
         </div>
         <button type="submit">Place Order</button>
-      </form>
-      
+      </form>  
     </div>
   </template>
   
@@ -62,26 +61,22 @@
     },
     methods: {
       placeOrder() {
-        // Save order data to Firebase or any other database of your choice
         const order = {
-          firstName: this.firstName,
-          lastName: this.lastName,
-          email: this.email,
-          address: this.address,
-          city: this.city,
-          state: this.state,
-          zipCode: this.zipCode,
-          cardInfo: this.cardInfo,
-          cart: this.$parent.cart,
-          total: this.$parent.total
-        }
+  firstName: this.firstName,
+  lastName: this.lastName,
+  email: this.email,
+  address: this.address,
+  city: this.city,
+  state: this.state,
+  zipCode: this.zipCode,
+  cardInfo: this.cardInfo,
+  cart: this.$parent.cart || [], 
+  total: this.$parent.total || 0,
+}
+
         db.collection('orders').add(order)
           .then(() => {
-            // Show confirmation message and clear cart
-            alert('Order placed successfully!')
-            this.$parent.cart = []
-            localStorage.removeItem('cart')
-            this.$router.push('/')
+            this.$router.push({ name: 'OrderConfirmation', params: { orderId: order.id } })
           })
           .catch(error => {
             console.error('Error placing order:', error)
@@ -90,6 +85,7 @@
     }
   }
   </script>
+  
  <style scoped>
  
 
