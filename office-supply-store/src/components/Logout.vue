@@ -14,7 +14,7 @@
       logout() {
         firebase.auth().signOut().then(() => {
           console.log('Logged out successfully');
-          this.$router.push('/login');
+          this.$router.push('/auth');
         }).catch((error) => {
           console.error(error);
         });

@@ -77,23 +77,22 @@ export default {
 },
 
     async addToCart(item) {
-      // Find the item in the inventory with a matching ID
+
       const inventoryItem = this.inventory.find(i => i.id === item.id)
       
-      // Check if the item is in stock
+
       if (inventoryItem.quantity === 0) {
         console.log('Item is out of stock')
         return
       }
       
-      // Decrement the quantity of the item in the inventory
+
       const inventoryRef = db.collection('inventory').doc(item.id)
       await inventoryRef.update({
         quantity: item.quantity - 1
       })
       inventoryItem.quantity -= 1
 
-      // Check if the item is already in the cart
       const existingCartItem = this.cart.find(cartItem => cartItem.id === item.id)
       if (existingCartItem) {
         existingCartItem.quantity += 1
@@ -108,10 +107,8 @@ export default {
         this.cart.push(cartItem)
       }
 
-      // Store the updated cart in localStorage
       localStorage.setItem('cart', JSON.stringify(this.cart))
 
-      // Redirect to the cart page
       this.$router.push('/cart')
     }
   }

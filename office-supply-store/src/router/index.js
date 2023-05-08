@@ -7,6 +7,8 @@ import Orders from '@/components/Orders.vue'
 import Cart from '@/components/Cart.vue'
 import Checkout from '@/components/Checkout.vue'
 import Logout from '@/components/Logout.vue'
+import OrderConfirmation from '@/components/OrderConfirmation.vue'
+
 
 const routes = [
   {
@@ -48,6 +50,11 @@ const routes = [
     path: '/logout',
     name: 'Logout',
     component: Logout
+  },
+  {
+    path: '/orderconfirmation',
+    name: 'OrderConfirmation',
+    component: OrderConfirmation
   },
 ]
   const router = createRouter({

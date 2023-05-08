@@ -19,7 +19,6 @@
           <td>
             <div class="input-group">
               <input type="number" min="1" :max="item.stock" v-model="item.quantity" @input="updateCart(item)">
-              <!-- <span v-if="item.quantityToAdd">{{ item.quantityToAdd }}</span> -->
             </div>
           </td>
           <td>{{ '$' + item.price }}</td>
@@ -41,12 +40,6 @@
 <script>
 import db from '@/boot/firebase.js'
 export default {
-  // props: {
-  //   quantityToAdd: {
-  //     type: Number,
-  //     default: 0
-  //   }
-  // },
   data() {
     return {
       cart: []
@@ -77,13 +70,11 @@ export default {
       this.updateCart(item)
     },
     updateCart(item) {
-      // Update the item's quantity in the cart
       const cartItem = this.cart.find(cartItem => cartItem.id === item.id)
       if (cartItem) {
         cartItem.quantity = item.quantity
       }
 
-      // Update the item's stock in the inventory
       const inventoryRef = db.collection('inventory').doc(item.id)
       if (typeof item.stock === 'number' && typeof item.quantity === 'number') {
         inventoryRef.update({
@@ -91,7 +82,6 @@ export default {
         })
       }
 
-      // Store the updated cart in localStorage
       localStorage.setItem('cart', JSON.stringify(this.cart))
     }
   }
@@ -99,14 +89,7 @@ export default {
 }
 
 </script>
-
-
-
-
-
-
-  
-  <style scoped>
+<style scoped>
 .container {
   max-width: 1400px;
   margin: 0 auto;

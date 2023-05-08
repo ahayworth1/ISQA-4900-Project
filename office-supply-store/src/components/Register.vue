@@ -33,12 +33,10 @@ export default {
       auth.createUserWithEmailAndPassword(this.email, this.password)
         .then(userCredential => {
           console.log(userCredential)
-          // Redirect the user to the home page
-          this.$router.push('/');
+          this.$router.push('/inventory');
         })
         .catch(error => {
           console.error(error)
-          // Handle the error, such as showing an error message or resetting the form
         })
     }
   }

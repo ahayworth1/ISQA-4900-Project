@@ -1,77 +1,73 @@
 <template>
-  <ul class="nav justify-content-end">
-    
-
+    <ul class="nav justify-content-end">
       <div class="EFS">The Office, Office Supply Store</div>
-      <li class="nav-item active">
-          <router-link to="/">Home</router-link> 
+      <!-- <li class="nav-item active">
+        <router-link to="/">Home</router-link> 
+      </li> -->
+      <template v-if="authenticated">
+        <li class="nav-item">
+        <router-link to="/inventory">Inventory</router-link>
       </li>
-      <li class="nav-item">
-          <router-link to="/inventory">Inventory</router-link>
-      </li>
-      <li class="nav-item">
-          <router-link to="/orders">Orders</router-link>
-      </li>
-    <li class="nav-item">
-          <router-link to="/auth">Login</router-link>
-      </li> 
-
-      <li class="nav-item">
-          <router-link to="/register">Register</router-link>
-      </li>
-      <li class="nav-item">
+        <li class="nav-item">
           <router-link to="/cart">Cart</router-link>
+        </li>
+        <li class="nav-item">
+          <router-link to="/orders">Orders</router-link>
+        </li>
+        <li class="nav-item">
+          <router-link to="/logout" @click.prevent="logout">Log Out</router-link>
+        </li>
+      </template>
+      <template v-else>
+        <li class="nav-item active">
+        <router-link to="/">Home</router-link> 
       </li>
-      <li class="nav-item">
-          <router-link to="/logout">Log Out</router-link>
-      </li>
-      
-
-  </ul> 
-
-
-  <router-view/>
-</template>
-
-<script>
-export default {
-  name: 'App',
-  data: () => ({
-      authenticated: false,
-      dialog: false,
-      menu: [
-          { title: 'Home', url:"/"},
-          { title: 'Inventory', url:"/inventory" },
-      ]
-  }),
-  mounted() {
-      apiService.getCustomerList().then(response => {
+        <li class="nav-item">
+          <router-link to="/auth">Login</router-link>
+        </li> 
+        <li class="nav-item">
+          <router-link to="/register">Register</router-link>
+        </li>
+      </template>
+    </ul> 
+    <router-view/>
+  </template> 
+  <script>
+  import firebase from 'firebase/app';
+  import 'firebase/auth';
+  
+  export default {
+    name: 'App',
+    data() {
+      return {
+        authenticated: false,
+      };
+    },
+    mounted() {
+      firebase.auth().onAuthStateChanged((user) => {
+        if (user) {
           this.authenticated = true;
-      }).catch(error => {
-          if (error.response.status === 401) {
-              localStorage.removeItem('isAuthenticates');
-              localStorage.removeItem('log_user');
-              localStorage.removeItem('token');
-              this.authenticated = false;
-          }
-      });
-      console.log('this.authenticated--'+this.authenticated);
-  },
-  methods: {
-      logout() {
-          localStorage.removeItem('isAuthenticates');
-          localStorage.removeItem('log_user');
-          localStorage.removeItem('token');
+        } else {
           this.authenticated = false;
-          // router.push('/');
-          window.location = "/"
+        }
+      });
+    },
+    methods: {
+      logout() {
+        firebase.auth().signOut().then(() => {
+          this.authenticated = false;
+          this.$router.push('/');
+        }).catch((error) => {
+          console.log(error.message);
+        });
       },
-      login() {
-          router.push("/auth");
-      },
-  }
-};
-</script>
+    },
+  };
+  </script>
+
+
+  
+
 
 <style lang="scss">
   #app {
@@ -129,6 +125,6 @@ export default {
   }
 
 
-</style>
+</style> -->
 
 
